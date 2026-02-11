@@ -75,8 +75,6 @@ export class AddAccount implements OnInit {
     const labels: Partial<Record<EAccount, string>> = {
       [EAccount.ACTIVE]: 'Activa',
       [EAccount.INACTIVE]: 'Inactiva',
-      [EAccount.BLOCKED]: 'Bloqueada',
-      [EAccount.CLOSED]: 'Cerrada'
     };
     return labels[status] || status;
   }

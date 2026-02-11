@@ -3,5 +3,5 @@ export enum DocumentType {
     CE = 'CE',
     NIT = 'NIT',
     TI = 'TI',
-    PASAPORTE = 'PASAPORTE'
+    PASAPORTE = 'PAS'
 }

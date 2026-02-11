@@ -15,9 +15,11 @@
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Cliente</mat-label>
                     <mat-select formControlName="customerId">
-                        <mat-option *ngFor="let customer of customers" [value]="customer.id">
-                            {{ customer.fullName }} - {{ customer.documentNumber }}
-                        </mat-option>
+                        @for(customer of customers; track customer){
+                            <mat-option [value]="customer.id">
+                                {{ customer.fullName }} - {{ customer.documentNumber }}
+                            </mat-option>
+                        }
                     </mat-select>
                     <mat-icon matPrefix>person</mat-icon>
                     @if(accountForm.get('customerId')?.hasError('required')){

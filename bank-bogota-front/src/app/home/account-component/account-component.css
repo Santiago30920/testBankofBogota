@@ -167,6 +167,22 @@
   color: #616161;
 }
 
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-buttons button {
+  transition: all 0.3s ease;
+}
+
+.action-buttons button:hover {
+  transform: scale(1.15);
+}
+
 /* Empty State */
 .empty-message {
   text-align: center;
@@ -519,5 +535,49 @@
   .p-datatable .p-sortable-column.p-highlight {
     background: rgba(0, 61, 130, 0.15);
     color: #003d82;
+  }
+}
+
+/* PrimeNG Confirm Dialog Overrides */
+::ng-deep {
+  .p-confirm-dialog {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  .p-confirm-dialog .p-dialog-header {
+    background: linear-gradient(135deg, #003d82 0%, #005eb8 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .p-confirm-dialog .p-dialog-content {
+    padding: 2rem;
+  }
+
+  .p-confirm-dialog .p-confirm-dialog-icon {
+    font-size: 3rem;
+    color: #f59e0b;
+  }
+
+  .p-confirm-dialog .p-confirm-dialog-message {
+    margin-left: 1rem;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .p-confirm-dialog .p-dialog-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .p-confirm-dialog .p-button-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border: none;
+  }
+
+  .p-confirm-dialog .p-button-danger:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
   }
 }

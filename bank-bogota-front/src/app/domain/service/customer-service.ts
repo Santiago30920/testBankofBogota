@@ -24,4 +24,14 @@ export class CustomerService {
         return this.http.get<ApiResponseDTO<CustomerDTO>>(this.apiUrl)
             .pipe(catchError(this.utilitieService.handleError));
     }
+
+    updateCustomer(id: string, customer: CustomerDTO): Observable<ApiResponseDTO<CustomerDTO>> {
+        return this.http.put<ApiResponseDTO<CustomerDTO>>(`${this.apiUrl}/${id}`, customer)
+            .pipe(catchError(this.utilitieService.handleError));
+    }
+
+    deleteCustomer(id: string): Observable<ApiResponseDTO<void>> {
+        return this.http.delete<ApiResponseDTO<void>>(`${this.apiUrl}/${id}`)
+            .pipe(catchError(this.utilitieService.handleError));
+    }
 }

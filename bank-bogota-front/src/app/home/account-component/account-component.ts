@@ -7,13 +7,14 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { AccountService } from '../../domain/service/account-service';
 import { CustomerService } from '../../domain/service/customer-service';
 import { AccountDTO } from '../../domain/dto/account-dto';
 import { CustomerDTO } from '../../domain/dto/customer-dto';
 import { AddAccount } from './add-account/add-account';
 import { EAccount } from '../../domain/enums/e-account';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-account-component',
@@ -26,9 +27,10 @@ import { EAccount } from '../../domain/enums/e-account';
     ToastModule,
     InputTextModule,
     TooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    ConfirmDialogModule
   ],
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './account-component.html',
   styleUrl: './account-component.css',
 })
@@ -41,7 +43,8 @@ export class AccountComponent implements OnInit {
     private accountService: AccountService,
     private customerService: CustomerService,
     private messageService: MessageService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -124,12 +127,46 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  deleteAccount(account: AccountDTO): void {
+    const customerName = this.getCustomerName(account.customerId);
+    this.confirmationService.confirm({
+      message: `¿Está seguro que desea eliminar la cuenta ${account.accountNumber} del cliente ${customerName}?`,
+      header: 'Confirmar Eliminación',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí, eliminar',
+      rejectLabel: 'Cancelar',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-text',
+      accept: () => {
+        this.loading = true;
+        this.accountService.deleteAccount(account.id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Cuenta Eliminada',
+              detail: 'La cuenta ha sido eliminada exitosamente.',
+              life: 3000
+            });
+            this.loadAccounts();
+          },
+          error: (error) => {
+            this.loading = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error al Eliminar',
+              detail: error.message,
+              life: 5000
+            });
+          }
+        });
+      }
+    });
+  }
+
   getStatusLabel(status: EAccount): string {
     const labels: Partial<Record<EAccount, string>> = {
       [EAccount.ACTIVE]: 'Activa',
       [EAccount.INACTIVE]: 'Inactiva',
-      [EAccount.BLOCKED]: 'Bloqueada',
-      [EAccount.CLOSED]: 'Cerrada'
     };
     return labels[status] || status;
   }
@@ -138,8 +175,6 @@ export class AccountComponent implements OnInit {
     const classes: Partial<Record<EAccount, string>> = {
       [EAccount.ACTIVE]: 'status-active',
       [EAccount.INACTIVE]: 'status-inactive',
-      [EAccount.BLOCKED]: 'status-blocked',
-      [EAccount.CLOSED]: 'status-closed'
     };
     return classes[status] || '';
   }

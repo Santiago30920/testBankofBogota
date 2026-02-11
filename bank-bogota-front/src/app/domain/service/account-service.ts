@@ -30,4 +30,9 @@ export class AccountService {
         return this.http.get<ApiResponseDTO<AccountDTO>>(this.apiUrl)
             .pipe(catchError(this.utilitieService.handleError));
     }
+
+    deleteAccount(id: string): Observable<ApiResponseDTO<void>> {
+        return this.http.delete<ApiResponseDTO<void>>(`${this.apiUrl}/${id}`)
+            .pipe(catchError(this.utilitieService.handleError));
+    }
 }

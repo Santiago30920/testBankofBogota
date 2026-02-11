@@ -1,8 +1,9 @@
+<p-toast position="top-right"></p-toast>
 <div class="modal-container">
   <div class="modal-header">
     <div class="modal-title">
-      <mat-icon class="modal-icon">person_add</mat-icon>
-      <h2>Registrar Nuevo Cliente</h2>
+      <mat-icon class="modal-icon">{{ isEditMode ? 'edit' : 'person_add' }}</mat-icon>
+      <h2>{{ isEditMode ? 'Editar Cliente' : 'Registrar Nuevo Cliente' }}</h2>
     </div>
     <button mat-icon-button (click)="onCancel()" class="close-button">
       <mat-icon>close</mat-icon>
@@ -22,9 +23,11 @@
             }
           </mat-select>
           <mat-icon matPrefix>badge</mat-icon>
-          <mat-error *ngIf="customerForm.get('documentType')?.hasError('required')">
-            El tipo de documento es requerido
-          </mat-error>
+          @if(customerForm.get('documentType')?.hasError('required')){
+            <mat-error>
+              El tipo de documento es requerido
+            </mat-error>
+          }
         </mat-form-field>
       </div>
 
@@ -85,9 +88,9 @@
                 El correo electrónico es requerido
               </mat-error>
           }
-          @if(customerForm.get('email')?.hasError('email')){
+          @if(customerForm.get('email')?.hasError('pattern')){
               <mat-error>
-                Ingrese un correo electrónico válido
+                Formato de correo inválido (ej: nombre@dominio.com)
               </mat-error>
           }
         </mat-form-field>
@@ -108,10 +111,10 @@
       mat-raised-button 
       type="button" 
       (click)="onSubmit()"
-      [disabled]="!customerForm.valid"
+      [disabled]="!customerForm.valid || isSubmitting"
       class="submit-button">
       <mat-icon>save</mat-icon>
-      Registrar Cliente
+      {{ isSubmitting ? 'Procesando...' : (isEditMode ? 'Actualizar Cliente' : 'Registrar Cliente') }}
     </button>
   </mat-dialog-actions>
 </div>
